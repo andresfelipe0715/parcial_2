@@ -11,30 +11,28 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "usuarios")
-
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column( nullable = false, length = 100)
-    @NotBlank(message = "el nombre no puede ser nulo")
+    @Column(length = 100, nullable = false)
+    @NotBlank(message = "El nombre no pueder estar en blanco")
     private String nombre;
-    @Column( nullable = false, length = 300)
-    @NotBlank(message = "los apellidos no pueden ser nulos")
+    @Column(length = 300, nullable = false)
+    @NotBlank(message = "los apellidos no pueder estar en blanco")
     private String apellidos;
-    @Column( nullable = false, length = 20, unique = true)
-    @NotBlank(message = "el documento no puede ser nulo")
+    @Column(length = 20, nullable = false,unique = true)
+    @NotBlank(message = "el documento no pueder estar en blanco")
     private String documento;
-    @Column( length = 100)
+    @Column(length = 100)
     private String direccion;
     private Date fechaNacimiento;
-    @Column( length = 20)
+    @Column(length = 20)
     private String telefono;
-    @Column(unique = true,nullable = false,length = 100)
-    @NotBlank(message = "el correo no puede ser nulo")
+    @Column(unique = true,length = 100,nullable = false)
+    @NotBlank(message = "el correo no pueder estar en blanco")
     private String correo;
-    @Column(nullable = false,length = 64)
-    @NotBlank(message = "la contraseña no puede ser nula")
+    @Column(nullable = false, length = 64)
+    @NotBlank(message = "la contraseña no pueder estar en blanco")
     private String password;
 }

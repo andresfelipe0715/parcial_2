@@ -5,13 +5,17 @@ import com.example.primer_parcial7.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class UsuarioController {
 
@@ -19,88 +23,108 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     @Autowired
     private JWTUtil jwtUtil;
-    @GetMapping(value = "/usuario/{id}")
-    public ResponseEntity getUsuario(@PathVariable Long id, @RequestHeader(value="Authorization") String token){
 
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.getUserById(id);
+    @GetMapping(value = "/usuario/{id}")
+    public ResponseEntity getUsuario(@PathVariable Long id,
+                                     @RequestHeader(value = "Authorization") String token ){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.getUserById(id);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
-    @PostMapping("/usuario")
-    public ResponseEntity crearUsuario(@Valid @RequestBody Usuario usuario){
 
+    @PostMapping("/usuario")
+    public ResponseEntity crearUsuario(@Valid @RequestBody  Usuario usuario){
         return usuarioService.createUser(usuario);
     }
-    @GetMapping(value="/usuarios")
-    public ResponseEntity listarUsuarios(@RequestHeader(value="Authorization") String token){
 
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.allUsers();
+    @GetMapping("/usuarios")
+    public ResponseEntity listarUsuarios(@RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.allUsers();
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
 
-    @GetMapping(value="/usuarios/nombre/{nombre}")
-    public ResponseEntity listarPorNombre(@PathVariable  String nombre , @RequestHeader(value="Authorization") String token){
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.allUsersByName(nombre);
+    @GetMapping("/usuario/{nombre}/{apellidos}")
+    public ResponseEntity listarPorNombreApellidos(@PathVariable String nombre, @PathVariable String apellidos,
+                                                   @RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.allUsersByNameAndLastName(nombre, apellidos);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
-    @GetMapping(value="/usuarios/apellidos/{apellidos}")
-    public ResponseEntity listarPorapellidos(@PathVariable  String apellidos , @RequestHeader(value="Authorization") String token){
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.allUsersByLastName(apellidos);
+
+    @GetMapping("/usuario/apellidos/{apellidos}")
+    public ResponseEntity listarPorApellidos(@PathVariable String apellidos,
+                                             @RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.allUsersByLastName(apellidos);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
-    @PutMapping(value = "/usuario/{id}")
-    public ResponseEntity editarUsuario(@PathVariable Long id,@RequestBody @Valid Usuario usuario, @RequestHeader(value="Authorization") String token){
 
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.editUser(id,usuario);
+    @GetMapping("/usuario/nombre/{nombre}")
+    public ResponseEntity listarPorNombre(@PathVariable String nombre,
+                                          @RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.allUsersByName(nombre);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
+        }
+    }
+    @PutMapping("/usuario/{id}")
+    public ResponseEntity editarUsuario(@PathVariable Long id,
+                                        @Valid @RequestBody Usuario usuario,
+                                        @RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            }
+            return usuarioService.editUser(id, usuario);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
-    @DeleteMapping (value = "/usuario/{id}")
-    public ResponseEntity eliminarUsuario(@PathVariable Long id, @RequestHeader(value="Authorization") String token) {
 
-        try{
-            if(jwtUtil.getKey(token) != null) {
-                return usuarioService.deleteUser(id);
+    @DeleteMapping("/usuario/{id}")
+    public ResponseEntity eliminarUsuario(@PathVariable Long id,
+                                          @RequestHeader(value = "Authorization") String token){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
             }
-            return ResponseEntity.badRequest().build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            return usuarioService.deleteUserById(id);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
         }
 
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
@@ -114,3 +138,8 @@ public class UsuarioController {
         return errors;
     }
 }
+
+
+
+
+
