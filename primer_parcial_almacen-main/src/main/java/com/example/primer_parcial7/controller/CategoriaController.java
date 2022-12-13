@@ -1,6 +1,7 @@
 package com.example.primer_parcial7.controller;
 
 import com.example.primer_parcial7.models.Categoria;
+import com.example.primer_parcial7.models.Usuario;
 import com.example.primer_parcial7.repository.CategoriaRepository;
 import com.example.primer_parcial7.services.CategoriaService;
 import com.example.primer_parcial7.utils.JWTUtil;
@@ -15,7 +16,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class CategoriaController {
 
@@ -23,7 +24,7 @@ public class CategoriaController {
     private CategoriaService categoriaService;
     @Autowired
     private JWTUtil jwtUtil;
-    @GetMapping("/categorias")
+    @GetMapping("/categorias/categorias")
     public ResponseEntity listarCategorias(@RequestHeader(value="Authorization") String token) {
         try{
             if(jwtUtil.getKey(token) != null) {
