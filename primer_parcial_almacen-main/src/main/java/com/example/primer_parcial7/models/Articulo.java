@@ -29,5 +29,7 @@ public class Articulo {
     private double precioVenta;
     @Column(nullable = false, scale = 2)
     private double precioCompra;
+    @ManyToOne
+    private Usuario usuario;
 }
 

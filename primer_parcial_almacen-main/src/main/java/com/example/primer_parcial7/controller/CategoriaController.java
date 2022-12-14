@@ -24,7 +24,7 @@ public class CategoriaController {
     private CategoriaService categoriaService;
     @Autowired
     private JWTUtil jwtUtil;
-    @GetMapping("/categorias/categorias")
+    @GetMapping("/categorias")
     public ResponseEntity listarCategorias(@RequestHeader(value="Authorization") String token) {
         try{
             if(jwtUtil.getKey(token) != null) {
@@ -37,7 +37,14 @@ public class CategoriaController {
 
     }
 
+    @GetMapping(value = "/categoria/{id}")
+    public ResponseEntity getCategoria(@PathVariable Long id, @RequestHeader(value = "Authorization") String token ) {
+        if(jwtUtil.getKey(token) == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("token no valido");
+        }
+        return categoriaService.getCategoriaById(id);
 
+        }
     @PostMapping("/categoria")
     public ResponseEntity crearCategoria(@RequestBody Categoria categoria, @RequestHeader(value="Authorization") String token){
 

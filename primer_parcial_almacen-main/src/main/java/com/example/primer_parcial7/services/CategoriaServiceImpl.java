@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CategoriaServiceImpl implements CategoriaService{
 
@@ -33,4 +35,17 @@ public class CategoriaServiceImpl implements CategoriaService{
         return new ResponseEntity(categorias, HttpStatus.OK);
 
     }
+
+
+    @Override
+    public ResponseEntity<List<Categoria>> getCategoriaById(Long id) {
+        Optional<Categoria> categoria= categoriaRepository.findById(id);
+        if(categoria.isPresent()){
+            return new ResponseEntity(categoria, HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
+
+
+

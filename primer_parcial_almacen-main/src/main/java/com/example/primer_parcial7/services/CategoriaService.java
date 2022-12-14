@@ -9,5 +9,6 @@ import java.util.List;
 public interface CategoriaService {
     ResponseEntity<Categoria> createCategory(Categoria categoria);
     ResponseEntity<List<Categoria>>allCategory();
+    ResponseEntity<List<Categoria>>getCategoriaById(Long Id);
 
 }
