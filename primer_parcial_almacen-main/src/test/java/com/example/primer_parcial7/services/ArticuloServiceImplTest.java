@@ -34,7 +34,7 @@ class ArticuloServiceImplTest {
 
         Articulo articulo = new Articulo();
         Categoria categoria = new Categoria();
-        categoria.setId(1l);
+        categoria.setId_cat(1l);
         categoria.setNombre("Comida");
         categoria.setDescripcion("contiene 300g");
         articulo.setId(1L);
@@ -59,7 +59,7 @@ class ArticuloServiceImplTest {
         //Given
         Articulo articulo = new Articulo();
         Categoria categoria = new Categoria();
-        categoria.setId(1l);
+        categoria.setId_cat(1l);
         categoria.setNombre("Comida");
         categoria.setDescripcion("granos y cereales");
 

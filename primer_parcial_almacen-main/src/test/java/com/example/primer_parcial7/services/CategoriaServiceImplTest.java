@@ -33,7 +33,7 @@ class CategoriaServiceImplTest {
     void listCategorias() {
 
         Categoria categoria = new Categoria();
-        categoria.setId(1l);
+        categoria.setId_cat(1l);
         categoria.setNombre("Comida");
         categoria.setDescripcion("granos y cereales");
 
