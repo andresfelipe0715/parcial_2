@@ -38,8 +38,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 
     @Override
-    public ResponseEntity<List<Categoria>> getCategoriaById(Long id) {
-        Optional<Categoria> categoria= categoriaRepository.findById(id);
+    public ResponseEntity<List<Categoria>> getCategoriaById(Long id_cat) {
+        Optional<Categoria> categoria= categoriaRepository.findById(id_cat);
         if(categoria.isPresent()){
             return new ResponseEntity(categoria, HttpStatus.OK);
         }

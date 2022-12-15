@@ -37,7 +37,19 @@ public class UsuarioController {
         }
 
     }
+    @GetMapping(value = "/usuario/correo/{correo}")
+    public ResponseEntity getUsuarioByCorreo(@PathVariable String correo,
+                                     @RequestHeader(value = "Authorization") String token ){
+        try {
+            if (jwtUtil.getKey(token) == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+            }
+            return usuarioService.getUserByCorreo(correo);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido. "+e.getMessage());
+        }
 
+    }
     @PostMapping("/usuario")
     public ResponseEntity crearUsuario(@Valid @RequestBody  Usuario usuario){
         return usuarioService.createUser(usuario);

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface UsuarioService {
     ResponseEntity<Usuario> getUserById(Long id);
+    ResponseEntity getUserByCorreo(String correo);
     ResponseEntity<Usuario> createUser(Usuario usuario);
     ResponseEntity<List<Usuario>> allUsers();
     ResponseEntity<List<Usuario>> allUsersByNameAndLastName(String nombre, String apellidos);
